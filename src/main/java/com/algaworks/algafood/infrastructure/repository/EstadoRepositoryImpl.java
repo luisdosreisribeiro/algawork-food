@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
@@ -26,11 +27,13 @@ public class EstadoRepositoryImpl implements EstadoRepository {
 		return manager.find(Estado.class, id);		
 	}
 
+	@Transactional
 	@Override
 	public Estado salvar(Estado estado) {
 		return manager.merge(estado);		
 	}
 
+	@Transactional
 	@Override
 	public void remover(Estado estado) {
 		manager.remove(estado);		
