@@ -1,5 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -23,13 +25,13 @@ public class CadastroCidadeService {
 
 	public Cidade salvar(Cidade cidade) {
 		Long estadoId = cidade.getEstado().getId();		
-		Estado estado = estadoRepository.buscar(cidade.getEstado().getId());
+		Optional<Estado> estado = estadoRepository.findById(cidade.getEstado().getId());
 
 		if(estado == null) {
 			throw new EntidadeNaoEncontradaException(
 					String.format("Não existe estado cadastrado com o código %d", estadoId ));
 		}
-		cidade.setEstado(estado);
+		cidade.setEstado(estado.get());
 
 		return cidadeRepository.salvar(cidade);
 	}

@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Estado;
-import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
 import com.algaworks.algafood.domain.service.CadastroEstadoService;
 
@@ -39,15 +38,15 @@ public class EstadoController {
 	public ResponseEntity<List<Estado>> listar(){
 		
 		List<Estado> estados = new ArrayList<>();		
-		estados = estadoRepository.listar();			
+		estados = estadoRepository.findAll();			
 		return ResponseEntity.ok(estados);
 	}
 	
 	@GetMapping("/{estadoId}")
 	public ResponseEntity<Estado> buscar(@PathVariable Long estadoId){
-		Estado estado = estadoRepository.buscar(estadoId);
-		if (estado != null) {
-			return ResponseEntity.ok(estado);
+		Optional <Estado> estado = estadoRepository.findById(estadoId);
+		if (estado.isPresent()) {
+			return ResponseEntity.ok(estado.get());
 		}
 		return ResponseEntity.notFound().build();			
 	}
@@ -60,14 +59,14 @@ public class EstadoController {
 	
 	@PutMapping("/{estadoId}")
 	public ResponseEntity<Estado> atualizar(@PathVariable Long estadoId, @RequestBody Estado estado){
-		Estado estadoAtual =  estadoRepository.buscar(estadoId);
+		Optional <Estado> estadoAtual =  estadoRepository.findById(estadoId);
 		
-		if(estadoAtual != null) {
-			BeanUtils.copyProperties(estado, estadoAtual, "id");
+		if(estadoAtual.isPresent()) {
+			BeanUtils.copyProperties(estado, estadoAtual.get(), "id");
 			
-			estadoAtual = cadastroEstadoService.salvar(estadoAtual);
+			Estado estadoSalvo = cadastroEstadoService.salvar(estadoAtual.get());
 			
-			return ResponseEntity.ok(estadoAtual);			
+			return ResponseEntity.ok(estadoSalvo);			
 			
 		}
 		return ResponseEntity.notFound().build();		
