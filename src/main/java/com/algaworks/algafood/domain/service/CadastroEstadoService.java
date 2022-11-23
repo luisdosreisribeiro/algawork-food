@@ -35,14 +35,6 @@ public class CadastroEstadoService {
                   String.format("Estado de código %d não pode ser removido, pois está em uso", estadoId));
           }
       }
-      
-	
-//	public void excluir (Long estadoId) {
-//		
-//			estadoRepository.remover(estadoId);
-//		
-//		
-//	}
-	
+   
 
 }
