@@ -25,7 +25,7 @@ public class CadastroCidadeService {
 
 	public Cidade salvar(Cidade cidade) {
 		Long estadoId = cidade.getEstado().getId();		
-		Optional<Estado> estado = estadoRepository.findById(cidade.getEstado().getId());
+		Optional<Estado> estado = estadoRepository.findById(estadoId);
 
 		if(estado == null) {
 			throw new EntidadeNaoEncontradaException(
