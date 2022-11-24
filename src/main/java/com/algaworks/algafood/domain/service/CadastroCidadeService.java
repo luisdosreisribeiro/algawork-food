@@ -33,12 +33,12 @@ public class CadastroCidadeService {
 		}
 		cidade.setEstado(estado.get());
 
-		return cidadeRepository.salvar(cidade);
+		return cidadeRepository.save(cidade);
 	}
 
 	public void excluir(Long cidadeId) {
 		try {
-			cidadeRepository.remover(cidadeId);
+			cidadeRepository.deleteById(cidadeId);
 		}catch(DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
 					String.format("Cidade com o código %d não pode ser removida, pois está em uso", cidadeId));
