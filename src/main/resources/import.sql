@@ -19,3 +19,5 @@ insert into estado(id, nome) values(3, 'Paraná');
 insert into cidade(id, nome, estado_id) values(1, 'Alvorada', 1);
 insert into cidade(id, nome, estado_id) values(2, 'Porto Alegre', 1);
 insert into cidade(id, nome, estado_id) values(3, 'Portão', 1);
+
+insert into restaurante_forma_pagamento(restaurante_id, formaPagamento_id) (1,1), (1,2), (1,3), (2,3),(3,2),(3,3); 
