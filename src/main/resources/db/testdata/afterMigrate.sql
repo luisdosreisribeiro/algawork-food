@@ -1,3 +1,31 @@
+set foreign_key_checks = 0;
+
+delete from cidade;
+delete from cozinha;
+delete from estado;
+delete from forma_pagamento;
+delete from grupo;
+delete from grupo_permissao;
+delete from permissao;
+delete from produto;
+delete from restaurante;
+delete from restaurante_forma_pagamento;
+delete from usuario;
+delete from usuario_grupo;
+
+set foreign_key_checks = 1;
+
+alter table  cidade auto_increment = 1;
+alter table  cozinha auto_increment = 1;
+alter table  estado auto_increment = 1;
+alter table  forma_pagamento auto_increment = 1;
+alter table  grupo auto_increment = 1;
+alter table  permissao auto_increment = 1;
+alter table  produto auto_increment = 1;
+alter table  restaurante auto_increment = 1;
+alter table  usuario auto_increment = 1;
+
+
 
 insert into cozinha (id, nome) values (1, 'Tailandesa');
 insert into cozinha (id, nome) values (2, 'Indiana');
@@ -44,6 +72,7 @@ insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('T-B
 insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Sanduíche X-Tudo', 'Sandubão com muito queijo, hamburger bovino, bacon, ovo, salada e maionese', 19, 1, 5);
 
 insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, 1, 6);
+
 
 
 
