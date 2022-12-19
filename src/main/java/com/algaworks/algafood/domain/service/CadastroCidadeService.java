@@ -17,6 +17,10 @@ import com.algaworks.algafood.domain.repository.EstadoRepository;
 @Service
 public class CadastroCidadeService {
 
+	private static final String MSG_CIDADE_EM_USO = "Cidade com o código %d não pode ser removida, pois está em uso";
+
+	private static final String MSG_CIDADE_NAO_EXISTENTE = "Não existe um cadastro de cidade com o código %d";
+
 	@Autowired
 	private CidadeRepository cidadeRepository;
 
@@ -41,11 +45,15 @@ public class CadastroCidadeService {
 			cidadeRepository.deleteById(cidadeId);
 		}catch(DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
-					String.format("Cidade com o código %d não pode ser removida, pois está em uso", cidadeId));
+					String.format(MSG_CIDADE_EM_USO, cidadeId));
 		}catch(EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(
-					String.format("Não existe um cadastro de cidade com o código %d", cidadeId));		
+					String.format(MSG_CIDADE_NAO_EXISTENTE, cidadeId));		
 		}
-
+	}
+	
+	public Cidade buscarOuFalhar(Long cidadeId) {
+		return cidadeRepository.findById(cidadeId)
+		.orElseThrow(()-> new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_EXISTENTE, cidadeId)));
 	}
 }	
