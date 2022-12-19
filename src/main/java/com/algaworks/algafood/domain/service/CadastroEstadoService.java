@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
 
@@ -28,8 +29,7 @@ public class CadastroEstadoService {
           try {
               estadoRepository.deleteById(estadoId);
           } catch (EmptyResultDataAccessException e) {
-              throw new EntidadeNaoEncontradaException(
-                  String.format(MSG_ESTADO_INEXISTENTE, estadoId));
+              throw new EstadoNaoEncontradoException(estadoId);
           
           } catch (DataIntegrityViolationException e) {
               throw new EntidadeEmUsoException(
@@ -39,7 +39,7 @@ public class CadastroEstadoService {
 	  
 	  public Estado buscarOuFalhar(Long estadoId) {
 		  return estadoRepository.findById(estadoId)
-				  .orElseThrow(()-> new EntidadeNaoEncontradaException(String.format(MSG_ESTADO_INEXISTENTE, estadoId)));
+				  .orElseThrow(()-> new EstadoNaoEncontradoException(estadoId));
 				  
 	  }
    
