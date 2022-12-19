@@ -43,14 +43,7 @@ public class CidadeController {
 	
 	@GetMapping("/{cidadeId}")
 	public Cidade buscar(@PathVariable Long cidadeId){		
-		return cadastroCidadeService.buscarOuFalhar(cidadeId);		
-		
-		
-//		Optional<Cidade> cidade = cidadeRepository.findById(cidadeId);
-//		if(cidade.isPresent()) {
-//			return ResponseEntity.ok(cidade.get());
-//		}
-//		return ResponseEntity.notFound().build();
+		return cadastroCidadeService.buscarOuFalhar(cidadeId);			
 		
 	}
 	
@@ -61,8 +54,7 @@ public class CidadeController {
 			return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
 		}catch(EntidadeNaoEncontradaException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
-		}		
-				
+		}						
 	}
 	
 	@PutMapping("/{cidadeId}")
@@ -70,17 +62,7 @@ public class CidadeController {
 		
 		Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(cidadeId);
 		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-		return cadastroCidadeService.salvar(cidadeAtual);
-		
-//		Optional<Cidade> cidadeAtual = cidadeRepository.findById(cidadeId);
-//		if(cidadeAtual.isPresent()) {
-//			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-//			
-//			Cidade cidadeSalva = cadastroCidadeService.salvar(cidadeAtual.get());
-//			
-//			return ResponseEntity.ok().body(cidadeSalva);	
-//		}
-//		return ResponseEntity.notFound().build();
+		return cadastroCidadeService.salvar(cidadeAtual);	
 	}
 	
 	@DeleteMapping("/{cidadeId}")

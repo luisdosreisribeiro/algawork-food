@@ -17,6 +17,10 @@ import com.algaworks.algafood.domain.repository.RestauranteRepository;
 @Service
 public class CadastroRestauranteService {
 
+	private static final String MSG_RESTAURANTE_EM_USO = "Restaurante de código %d não pode ser excluído por estar em uso. ";
+
+	private static final String MSG_RESTAURANTE_INEXISTENTE = "Não existe restaurante com o código %d. ";
+
 	@Autowired
 	private RestauranteRepository restauranteRepository;
 
@@ -47,10 +51,14 @@ public class CadastroRestauranteService {
 		try {
 			restauranteRepository.deleteById(restauranteId);
 		}catch (EmptyResultDataAccessException e) {
-			throw new EntidadeNaoEncontradaException (String.format("Não existe restaurante com o código %d. ", restauranteId));
+			throw new EntidadeNaoEncontradaException (String.format(MSG_RESTAURANTE_INEXISTENTE, restauranteId));
 		}catch (DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.format("Restaurante de código %d não pode ser excluído por estar em uso. ", restauranteId));
+			throw new EntidadeEmUsoException(String.format(MSG_RESTAURANTE_EM_USO, restauranteId));
 		}
-
+	}
+	
+	public Restaurante buscarOuFalhar(Long restauranteId) {
+		return restauranteRepository.findById(restauranteId)
+				.orElseThrow(()-> new EntidadeNaoEncontradaException(String.format(MSG_RESTAURANTE_INEXISTENTE, restauranteId)));
 	}
 }
