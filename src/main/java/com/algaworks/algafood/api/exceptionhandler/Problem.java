@@ -20,4 +20,8 @@ public class Problem {
 	private String title;
 	private String detail;
 	
+	private String userMessage;
+	
+	
+	
 }
