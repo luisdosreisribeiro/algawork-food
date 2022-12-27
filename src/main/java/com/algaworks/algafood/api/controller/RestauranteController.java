@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.Groups;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -58,7 +59,7 @@ public class RestauranteController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)	
-	public Restaurante adicionar( @RequestBody @Valid Restaurante restaurante){	
+	public Restaurante adicionar( @RequestBody @Validated(Groups.CadastroRestaurante.class) Restaurante restaurante){	
 		try {
 			return  cadastroRestauranteService.salvar(restaurante);
 		}catch(CozinhaNaoEncontradaException e) {
