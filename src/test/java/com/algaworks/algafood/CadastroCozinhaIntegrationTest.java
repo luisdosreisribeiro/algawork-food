@@ -1,6 +1,7 @@
 package com.algaworks.algafood;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import javax.validation.ConstraintViolationException;
 
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
+import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 
@@ -47,4 +50,27 @@ class CadastroCozinhaIntegrationTest {
 				});
 		assertThat(erroEsperado).isNotNull();			
 	}
+	
+	@Test
+	public void deveFalhar_QuandoExcluirCozinhaEmUso() {		
+		
+		EntidadeEmUsoException exception =
+		assertThrows(EntidadeEmUsoException.class, ()->{
+			cadastroCozinha.excluir(1L);
+		});
+		
+		assertThat(exception).isNotNull();		
+		
+	}
+	
+	@Test
+	public void deveFalhar_QuandoExcluirCozinhaInexistente() {
+		
+		EntidadeNaoEncontradaException exception = 
+		assertThrows(EntidadeNaoEncontradaException.class, ()->{
+			cadastroCozinha.excluir(500L);
+		});
+		assertThat(exception).isNotNull();				
+	}
+	
 }
