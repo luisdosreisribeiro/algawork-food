@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -18,24 +19,26 @@ public class CadastroEstadoService {
 	@Autowired
 	private EstadoRepository estadoRepository;
 	
+	@Transactional
 	public Estado salvar(Estado estado) {
 		return estadoRepository.save(estado);		
 	}
 	
 	
 	
-	  public void excluir(Long estadoId) {
-          try {
-              estadoRepository.deleteById(estadoId);
-          } catch (EmptyResultDataAccessException e) {
-              throw new EstadoNaoEncontradoException(estadoId);
-          
-          } catch (DataIntegrityViolationException e) {
-              throw new EntidadeEmUsoException(
-                  String.format(MSG_ESTADO_EM_USO, estadoId));
-          }
-      }
-	  
+	@Transactional
+	public void excluir(Long estadoId) {
+		try {
+			estadoRepository.deleteById(estadoId);
+		} catch (EmptyResultDataAccessException e) {
+			throw new EstadoNaoEncontradoException(estadoId);
+
+		} catch (DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(
+					String.format(MSG_ESTADO_EM_USO, estadoId));
+		}
+	}
+
 	  public Estado buscarOuFalhar(Long estadoId) {
 		  return estadoRepository.findById(estadoId)
 				  .orElseThrow(()-> new EstadoNaoEncontradoException(estadoId));
