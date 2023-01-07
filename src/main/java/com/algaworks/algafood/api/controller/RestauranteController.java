@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.assembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.model.CozinhaModel;
 import com.algaworks.algafood.api.model.RestauranteModel;
@@ -42,6 +43,9 @@ public class RestauranteController {
 	@Autowired
 	private RestauranteModelAssembler restauranteModelAssembler;
 	
+	@Autowired
+	private RestauranteInputDisassembler restauranteInputDisassembler;
+	
 	@GetMapping
 	public List<RestauranteModel> listar(){
 		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
@@ -60,7 +64,7 @@ public class RestauranteController {
 	@ResponseStatus(HttpStatus.CREATED)	
 	public RestauranteModel adicionar( @RequestBody @Valid RestauranteInput restauranteInput){	
 		try {
-			Restaurante restaurante = toDomainObject(restauranteInput);
+			Restaurante restaurante =  restauranteInputDisassembler.toDomainObject(restauranteInput);
 			
 			return restauranteModelAssembler.toModel(cadastroRestauranteService.salvar(restaurante));
 		}catch(CozinhaNaoEncontradaException e) {
@@ -73,7 +77,7 @@ public class RestauranteController {
 	public RestauranteModel atualizar(@PathVariable Long restauranteId, 
 			@RequestBody @Valid RestauranteInput restauranteInput){
 		try {
-			Restaurante restaurante = toDomainObject(restauranteInput);
+			Restaurante restaurante =  restauranteInputDisassembler.toDomainObject(restauranteInput);
 			
 			Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(restauranteId);
 			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
@@ -91,21 +95,6 @@ public class RestauranteController {
 	public void remover(@PathVariable Long restauranteId){		
 			cadastroRestauranteService.excluir(restauranteId);
 
-	}
-	
-
-	
-	private Restaurante toDomainObject(RestauranteInput restauranteInput) {
-		Restaurante restaurante = new Restaurante();
-		restaurante.setNome(restauranteInput.getNome());
-		restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
-		
-		Cozinha cozinha = new Cozinha();
-		cozinha.setId(restauranteInput.getCozinha().getId());
-		
-		restaurante.setCozinha(cozinha);
-		
-		return restaurante;
 	}
 	
 }
