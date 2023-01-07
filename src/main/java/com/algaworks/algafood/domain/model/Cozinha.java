@@ -34,9 +34,6 @@ public class Cozinha {
 	private String nome;
 	
 	@OneToMany(mappedBy = "cozinha")
-	private List<Restaurante> restaurantes = new ArrayList<>();
-
-
-	
+	private List<Restaurante> restaurantes = new ArrayList<>();	
 
 }
