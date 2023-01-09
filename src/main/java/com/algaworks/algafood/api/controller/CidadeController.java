@@ -59,10 +59,10 @@ public class CidadeController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cidade salvar(@RequestBody @Valid CidadeInput cidadeInput){	
+	public CidadeModel salvar(@RequestBody @Valid CidadeInput cidadeInput){	
 		try {
 			Cidade cidade = cidadeInputDisassembler.toDomainObject(cidadeInput);
-			return cadastroCidadeService.salvar(cidade);
+			return cidadeModelAssembler.toModel(cadastroCidadeService.salvar(cidade));
 		}				
 		catch(EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(),e);
@@ -70,12 +70,12 @@ public class CidadeController {
 	}
 	
 	@PutMapping("/{cidadeId}")
-	public Cidade atualizar(@PathVariable Long cidadeId,@RequestBody  @Valid CidadeInput cidadeInput){
+	public CidadeModel atualizar(@PathVariable Long cidadeId,@RequestBody  @Valid CidadeInput cidadeInput){
 		try {
 		Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(cidadeId);
 		cidadeInputDisassembler.copyToDomainObject(cidadeInput, cidadeAtual);		
 		
-			return cadastroCidadeService.salvar(cidadeAtual);
+			return cidadeModelAssembler.toModel(cadastroCidadeService.salvar(cidadeAtual));
 		}
 		catch(EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
