@@ -31,9 +31,11 @@ public class CadastroGrupoService {
 		return grupoRepository.save(grupo);				
 	}
 	
+	@Transactional
 	public void excluir(Long grupoId) {
 		try {
 			grupoRepository.deleteById(grupoId);
+			grupoRepository.flush();
 		}catch(EmptyResultDataAccessException e) {
 			throw new GrupoNaoEncontradoException(grupoId);
 		}catch(DataIntegrityViolationException e ) {
