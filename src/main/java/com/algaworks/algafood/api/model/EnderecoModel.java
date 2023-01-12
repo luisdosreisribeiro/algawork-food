@@ -9,6 +9,7 @@ public class EnderecoModel {
 	
 	private String cep;
 	private String numero;
+	private String logradouro;
 	private String complemento;
 	private String bairro;
 	private CidadeModelResumoModel cidade;
