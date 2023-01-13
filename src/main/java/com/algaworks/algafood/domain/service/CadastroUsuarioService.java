@@ -1,10 +1,13 @@
 package com.algaworks.algafood.domain.service;
 
+import java.util.Optional;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.algaworks.algafood.api.model.input.UsuarioInputSenha;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.UsuarioNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Usuario;
@@ -16,13 +19,29 @@ public class CadastroUsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
+	@Autowired
+	private EntityManager manager;
+	
 	
 	public Usuario buscarOuFalhar(Long usuarioId) {
 		return usuarioRepository.findById(usuarioId)
 				.orElseThrow(()-> new UsuarioNaoEncontradoException (usuarioId));
 	}
 
+	@Transactional
 	public Usuario salvar(Usuario usuario) {
+		//usuarioRepository.detach(usuario);
+		manager.detach(usuario);
+		
+		Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
+		
+		if(usuarioExistente.isPresent()&& !usuarioExistente.get().equals(usuario)) {
+			throw new NegocioException(
+					String.format("Já existe um usuário cadastrado com o e-mail %s", usuario.getEmail()));
+			
+		}
+		
+		
 		return usuarioRepository.save(usuario);		
 	}
 	
@@ -35,7 +54,6 @@ public class CadastroUsuarioService {
 		if(usuario.senhaNaoCoincidemCom(senhaAtual)) {
 			throw new NegocioException("Senha atual informada não coincide com a senha do usuário.");
 		};
-		usuario.setSenha(novaSenha);		
-		
+		usuario.setSenha(novaSenha);			
 	}	
 }
