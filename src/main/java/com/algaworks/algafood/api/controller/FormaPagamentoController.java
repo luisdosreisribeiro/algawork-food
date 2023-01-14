@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.algaworks.algafood.api.assembler.FormaPagamentoAssembler;
+import com.algaworks.algafood.api.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafood.api.assembler.FormaPagamentoInputDisassembler;
 import com.algaworks.algafood.api.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.model.input.FormaPagamentoInput;
@@ -35,7 +35,7 @@ public class FormaPagamentoController {
 	CadastroFormaPagamentoService cadastroFormaPagamentoService;
 	
 	@Autowired
-	FormaPagamentoAssembler formaPagamentoAssembler;
+	FormaPagamentoModelAssembler formaPagamentoAssembler;
 	
 	@Autowired
 	FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
