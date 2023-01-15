@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -38,7 +39,8 @@ public class RestauranteProdutoController {
 			ProdutoModelAssembler produtoModelAssembler,
 			CadastroProdutoService cadastroProdutoSertive,
 			ProdutoRepository produtoRepository,
-			ProdutoInputDisassembler produtoInputDisassembler) 
+			ProdutoInputDisassembler produtoInputDisassembler)
+	
 	{
 		this.cadastroServiceRestaurante = cadastroServiceRestaurante;
 		this.produtoModelAssembler = produtoModelAssembler;
@@ -75,5 +77,18 @@ public class RestauranteProdutoController {
 
 		return produtoModelAssembler.toModel(produto);	
 	}
+	
+	@PutMapping("/{produtoId}")	
+	public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoInput produtoInput) {
+			
+		Produto produtoAtual = cadastroProdutoSertive.buscarOuFalhar(restauranteId, produtoId);
+		
+		produtoInputDisassembler.copyToDomainObject(produtoInput, produtoAtual);			
+		
+		cadastroProdutoSertive.salvar(produtoAtual);
+
+		return produtoModelAssembler.toModel(produtoAtual);	
+	}
+	
 
 }
