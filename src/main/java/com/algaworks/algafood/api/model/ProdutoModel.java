@@ -2,12 +2,6 @@ package com.algaworks.algafood.api.model;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import com.algaworks.algafood.domain.model.Restaurante;
-
 import lombok.Getter;
 import lombok.Setter;
 

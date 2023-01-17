@@ -1,9 +1,5 @@
 package com.algaworks.algafood.api.model;
 
-import org.springframework.stereotype.Component;
-
-import com.algaworks.algafood.domain.model.Estado;
-
 import lombok.Getter;
 import lombok.Setter;
 

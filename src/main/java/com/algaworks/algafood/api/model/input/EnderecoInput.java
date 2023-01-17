@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 public class EnderecoInput {
 	
+
 	@NotBlank
 	private String cep;
 	
