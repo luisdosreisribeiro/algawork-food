@@ -10,17 +10,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.UsuarioNaoEncontradoException;
+import com.algaworks.algafood.domain.model.Grupo;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
 
 @Service
 public class CadastroUsuarioService {
 	
-	@Autowired
-	private UsuarioRepository usuarioRepository;
 	
-	@Autowired
-	private EntityManager manager;
+	private final UsuarioRepository usuarioRepository;	
+	private final  EntityManager manager;
+	private final CadastroGrupoService cadastroGrupoService;
+	
+	public CadastroUsuarioService(
+			UsuarioRepository usuarioRepository,
+			EntityManager manager,
+			CadastroGrupoService cadastroGrupoService) {
+		this.usuarioRepository = usuarioRepository;
+		this.manager = manager;
+		this.cadastroGrupoService = cadastroGrupoService;
+
+	}
 	
 	
 	public Usuario buscarOuFalhar(Long usuarioId) {
@@ -56,4 +66,21 @@ public class CadastroUsuarioService {
 		};
 		usuario.setSenha(novaSenha);			
 	}	
+	
+	@Transactional
+	public void associaGrupo(Long usuarioId, Long grupoId) {
+		Usuario usuario = buscarOuFalhar(usuarioId);
+		Grupo grupo = cadastroGrupoService.buscarOuFalhar(grupoId);
+		
+		usuario.associaGrupo(grupo);
+	}
+	
+	@Transactional
+	public void desassociaGrupo(Long usuarioId, Long grupoId) {
+		Usuario usuario = buscarOuFalhar(usuarioId);
+		Grupo grupo = cadastroGrupoService.buscarOuFalhar(grupoId);
+		
+		usuario.desassociaGrupo(grupo);		
+	}
+	
 }
