@@ -2,7 +2,6 @@ package com.algaworks.algafood.domain.model;
 
 import java.time.OffsetDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -48,7 +47,7 @@ public class Usuario {
 	private Set<Grupo> grupos = new HashSet<>();
 	
 	
-	
+	//Parou de funcionar getters e setters do lombok
 	
 	public Long getId() {
 		return id;

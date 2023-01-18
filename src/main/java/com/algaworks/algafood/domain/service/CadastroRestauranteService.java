@@ -1,6 +1,5 @@
 package com.algaworks.algafood.domain.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -12,6 +11,7 @@ import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.model.Restaurante;
+import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 
 @Service
@@ -20,17 +20,26 @@ public class CadastroRestauranteService {
 	private static final String MSG_RESTAURANTE_EM_USO = "Restaurante de código %d não pode ser excluído por estar em uso. ";
 	
 
-	@Autowired
-	private RestauranteRepository restauranteRepository;
 
-	@Autowired
-	private CadastroCozinhaService cadastroCozinhaService;
+	private final RestauranteRepository restauranteRepository;	
+	private final CadastroCozinhaService cadastroCozinhaService;	
+	private final CadastroCidadeService cadastroCidadeService;	
+	private final CadastroFormaPagamentoService cadastroFormaPagamentoService;
+	private final CadastroUsuarioService cadastroUsuarioService;
 	
-	@Autowired
-	CadastroCidadeService cadastroCidadeService;
-	
-	@Autowired
-	private CadastroFormaPagamentoService cadastroFormaPagamentoService;
+	public CadastroRestauranteService(
+			RestauranteRepository restauranteRepository,
+			CadastroCozinhaService cadastroCozinhaService,
+			CadastroCidadeService cadastroCidadeService,
+			CadastroFormaPagamentoService cadastroFormaPagamentoService,
+			CadastroUsuarioService cadastroUsuarioService
+			) {
+		this.restauranteRepository = restauranteRepository;
+		this.cadastroCozinhaService = cadastroCozinhaService;
+		this.cadastroCidadeService = cadastroCidadeService;
+		this.cadastroFormaPagamentoService = cadastroFormaPagamentoService;
+		this.cadastroUsuarioService = cadastroUsuarioService;		
+	}
 	
 
 	@Transactional
@@ -106,4 +115,23 @@ public class CadastroRestauranteService {
 		Restaurante restaurante = buscarOuFalhar(restauranteId);
 		restaurante.fechar();
 	}
+	
+	@Transactional
+	public void adicionarResponsavel(Long restauranteId, Long usuarioId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
+		
+		restaurante.adicionarResponsavel(usuario);
+	}
+	
+	@Transactional
+	public void removerResponsavel(Long restauranteId, Long usuarioId) {
+		
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
+		
+		restaurante.removerResponsavel(usuario);
+		
+	}
+	
 }
