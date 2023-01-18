@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.model.GrupoModel;
 import com.algaworks.algafood.domain.model.Grupo;
-import com.algaworks.algafood.domain.repository.GrupoRepository;
 
 @Component
 public class GrupoModelAssembler {

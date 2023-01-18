@@ -1,23 +1,32 @@
 package com.algaworks.algafood.domain.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.GrupoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Grupo;
+import com.algaworks.algafood.domain.model.Permissao;
 import com.algaworks.algafood.domain.repository.GrupoRepository;
 
 @Service
 public class CadastroGrupoService {
 	
 	private static final String MSG_GRUPO_EM_USO = "O grupo de código %d não pode ser excluído, pois está em uso.";
-	@Autowired
-	GrupoRepository grupoRepository;
+	
+	private final GrupoRepository grupoRepository;
+	private final CadastroPermissaoService cadastroPermissaoService;
+	
+	public CadastroGrupoService(
+			GrupoRepository grupoRepository,
+			CadastroPermissaoService cadastroPermissaoService
+			) {
+		this.grupoRepository = grupoRepository;
+		this.cadastroPermissaoService = cadastroPermissaoService;
+		
+	}
 	
 	public Grupo buscarOuFalhar(Long grupoId) {
 		
@@ -43,5 +52,20 @@ public class CadastroGrupoService {
 		}
 	}
 
+	@Transactional
+	public void associarPermissao(Long permissaoId, Long grupoId) {
+		Grupo grupo = buscarOuFalhar(grupoId);
+		Permissao permissao = cadastroPermissaoService.buscarOuFalhar(permissaoId);
+		
+		grupo.associaPermissao(permissao);
+	}
+	
+	@Transactional
+	public void desassociarPermissao(Long permissaoId, Long grupoId) {
+		Grupo grupo = buscarOuFalhar(grupoId);
+		Permissao permissao = cadastroPermissaoService.buscarOuFalhar(permissaoId);
+		
+		grupo.desassociaPermissao(permissao);
+	}
 }
 
