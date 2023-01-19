@@ -1,5 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
+import java.util.List;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -91,17 +93,25 @@ public class CadastroRestauranteService {
 	
 	@Transactional
 	public void ativar(Long restauranteId) {
-		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-		//restauranteAtual.setAtivo(true);
+		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);		
 		restauranteAtual.ativar();
 		
 	}
 	
 	@Transactional
+	public void ativar(List<Long> restaurantesId) {
+		restaurantesId.forEach(this::ativar);
+	}
+	
+	@Transactional
 	public void inativar(Long restauranteId) {
-		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-		//restauranteAtual.setAtivo(false);
+		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);		
 		restauranteAtual.inativar();		
+	}
+	
+	@Transactional
+	public void inativar(List<Long> restaurantesId) {
+		restaurantesId.forEach(this::inativar);
 	}
 	
 	@Transactional
@@ -115,6 +125,8 @@ public class CadastroRestauranteService {
 		Restaurante restaurante = buscarOuFalhar(restauranteId);
 		restaurante.fechar();
 	}
+	
+	
 	
 	@Transactional
 	public void adicionarResponsavel(Long restauranteId, Long usuarioId) {
