@@ -1,20 +1,11 @@
 package com.algaworks.algafood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -32,7 +23,7 @@ public class Pedido {
 	private Long id;
 	
 	@Column(nullable = false)
-	private BigDecimal subTotal;
+	private BigDecimal subtotal;
 	
 	@Column(nullable = false)
 	private BigDecimal taxaFrete;
@@ -65,9 +56,22 @@ public class Pedido {
 	
 	@Embedded
 	private Endereco enderecoEntrega;
+
+	@Enumerated(EnumType.STRING)
+	private StatusPedido status = StatusPedido.CRIADO;
 	
-	private StatusPedido status;
-	
-	
+	public void calcularValorTotal(){
+		this.subtotal = getItens().stream()
+				.map(item -> item.getPrecoTotal())
+				.reduce(BigDecimal.ZERO,BigDecimal::add);
+	}
+
+	public void definirFrete(){
+		setTaxaFrete(getRestaurante().getTaxaFrete());
+	}
+
+	public void atribuirPedidoItens(){
+		getItens().forEach(item -> item.setPedido(this));
+	}
 
 }

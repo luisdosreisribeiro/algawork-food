@@ -79,104 +79,112 @@ public class Restaurante {
 	
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
-	
-	//Parou de reconher gettes e setter do lombok
-	
-	public Long getId() {
-		return id;
+
+	public boolean aceitaFromaPagamento(FormaPagamento formaPagamento){
+		return getFormasPagamento().contains(formaPagamento);
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public BigDecimal getTaxaFrete() {
-		return taxaFrete;
-	}
-
-	public void setTaxaFrete(BigDecimal taxaFrete) {
-		this.taxaFrete = taxaFrete;
-	}
-
-	public Cozinha getCozinha() {
-		return cozinha;
-	}
-
-	public void setCozinha(Cozinha cozinha) {
-		this.cozinha = cozinha;
-	}
-
-	public Endereco getEndereco() {
-		return endereco;
-	}
-
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
-	}
-
-	public boolean isAtivo() {
-		return ativo;
-	}
-
-	public void setAtivo(boolean ativo) {
-		this.ativo = ativo;
-	}
-
-	public Boolean getAberto() {
-		return aberto;
-	}
-
-	public void setAberto(Boolean aberto) {
-		this.aberto = aberto;
-	}
-
-	public OffsetDateTime getDataCadastro() {
-		return dataCadastro;
-	}
-
-	public void setDataCadastro(OffsetDateTime dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
-
-	public OffsetDateTime getDataAtualizacao() {
-		return dataAtualizacao;
-	}
-
-	public void setDataAtualizacao(OffsetDateTime dataAtualizacao) {
-		this.dataAtualizacao = dataAtualizacao;
-	}
-
-	public Set<FormaPagamento> getFormasPagamento() {
-		return formasPagamento;
-	}
-
-	public void setFormasPagamento(Set<FormaPagamento> formasPagamento) {
-		this.formasPagamento = formasPagamento;
-	}
-
-	public List<Produto> getProdutos() {
-		return produtos;
-	}
-
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public boolean naoAceitaFormaPagamento(FormaPagamento formaPagamento){
+		return !aceitaFromaPagamento(formaPagamento);
 	}
 	
-	public Set<Usuario> getResponsaveis() {
-		return responsaveis;
-	}
-
-	public void setResponsaveis(Set<Usuario> responsaveis) {
-		this.responsaveis = responsaveis;
-	}
+//	//Parou de reconher gettes e setter do lombok
+//
+//	public Long getId() {
+//		return id;
+//	}
+//
+//	public void setId(Long id) {
+//		this.id = id;
+//	}
+//
+//	public String getNome() {
+//		return nome;
+//	}
+//
+//	public void setNome(String nome) {
+//		this.nome = nome;
+//	}
+//
+//	public BigDecimal getTaxaFrete() {
+//		return taxaFrete;
+//	}
+//
+//	public void setTaxaFrete(BigDecimal taxaFrete) {
+//		this.taxaFrete = taxaFrete;
+//	}
+//
+//	public Cozinha getCozinha() {
+//		return cozinha;
+//	}
+//
+//	public void setCozinha(Cozinha cozinha) {
+//		this.cozinha = cozinha;
+//	}
+//
+//	public Endereco getEndereco() {
+//		return endereco;
+//	}
+//
+//	public void setEndereco(Endereco endereco) {
+//		this.endereco = endereco;
+//	}
+//
+//	public boolean isAtivo() {
+//		return ativo;
+//	}
+//
+//	public void setAtivo(boolean ativo) {
+//		this.ativo = ativo;
+//	}
+//
+//	public Boolean getAberto() {
+//		return aberto;
+//	}
+//
+//	public void setAberto(Boolean aberto) {
+//		this.aberto = aberto;
+//	}
+//
+//	public OffsetDateTime getDataCadastro() {
+//		return dataCadastro;
+//	}
+//
+//	public void setDataCadastro(OffsetDateTime dataCadastro) {
+//		this.dataCadastro = dataCadastro;
+//	}
+//
+//	public OffsetDateTime getDataAtualizacao() {
+//		return dataAtualizacao;
+//	}
+//
+//	public void setDataAtualizacao(OffsetDateTime dataAtualizacao) {
+//		this.dataAtualizacao = dataAtualizacao;
+//	}
+//
+//	public Set<FormaPagamento> getFormasPagamento() {
+//		return formasPagamento;
+//	}
+//
+//	public void setFormasPagamento(Set<FormaPagamento> formasPagamento) {
+//		this.formasPagamento = formasPagamento;
+//	}
+//
+//	public List<Produto> getProdutos() {
+//		return produtos;
+//	}
+//
+//	public void setProdutos(List<Produto> produtos) {
+//		this.produtos = produtos;
+//	}
+//
+//	public Set<Usuario> getResponsaveis() {
+//		return responsaveis;
+//	}
+//
+//	public void setResponsaveis(Set<Usuario> responsaveis) {
+//		this.responsaveis = responsaveis;
+//	}
 
 	public void ativar() {
 		setAtivo(true);
