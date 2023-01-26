@@ -25,7 +25,7 @@ public class PedidoController {
     private final PedidoModelAssembler pedidoModelAssembler;
     private final EmissaoPedidoService emissaoPedidoService;
     private final PedidoResumoModelAssembler pedidoResumoModelAssembler;
-    private PedidoInputDisassembler pedidoInputDisassembler;
+    private final PedidoInputDisassembler pedidoInputDisassembler;
 
 
     public PedidoController(
