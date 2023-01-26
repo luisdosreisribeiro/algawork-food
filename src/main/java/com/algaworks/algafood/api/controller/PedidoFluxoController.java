@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value="/pedidos/{pedidoId}")
-public class PedidoPedidoController {
+public class PedidoFluxoController {
     private final FluxoPedidoService fluxoPedidoService;
 
-    public PedidoPedidoController(
+    public PedidoFluxoController(
             FluxoPedidoService fluxoPedidoService){
         this.fluxoPedidoService = fluxoPedidoService;
     }
@@ -17,6 +17,17 @@ public class PedidoPedidoController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void confirmar(@PathVariable Long pedidoId){
         fluxoPedidoService.confirmar(pedidoId);
+    }
+    @PutMapping("/cancelar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancelar(@PathVariable Long pedidoId){
+        fluxoPedidoService.cancelar(pedidoId);
+    }
+
+    @PutMapping("/entregar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void entregar(@PathVariable Long pedidoId){
+        fluxoPedidoService.entregar(pedidoId);
     }
 
 }
