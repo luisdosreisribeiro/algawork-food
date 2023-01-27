@@ -99,5 +99,6 @@ public class Pedido {
 	@PrePersist
 	private void gerarCodigo(){
 		setCodigo(UUID.randomUUID().toString());
+
 	}
 }
