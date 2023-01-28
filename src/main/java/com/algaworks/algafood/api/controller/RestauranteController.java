@@ -1,21 +1,5 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.algaworks.algafood.api.assembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.model.RestauranteModel;
@@ -25,31 +9,69 @@ import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Restaurante;
+import com.algaworks.algafood.domain.model.view.RestauranteView;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
 	
-	@Autowired
-	private RestauranteRepository restauranteRepository;
-	
-	@Autowired
-	private CadastroRestauranteService cadastroRestauranteService;
-	
-	@Autowired
-	private RestauranteModelAssembler restauranteModelAssembler;
-	
-	@Autowired
-	private RestauranteInputDisassembler restauranteInputDisassembler;
-	
+
+	private final RestauranteRepository restauranteRepository;
+	private final CadastroRestauranteService cadastroRestauranteService;
+	private final RestauranteModelAssembler restauranteModelAssembler;
+	private final RestauranteInputDisassembler restauranteInputDisassembler;
+
+
+	public RestauranteController(
+			RestauranteRepository restauranteRepository,
+			CadastroRestauranteService cadastroRestauranteService,
+			RestauranteModelAssembler restauranteModelAssembler,
+			RestauranteInputDisassembler restauranteInputDisassembler
+
+	){
+		this.restauranteRepository = restauranteRepository;
+		this.cadastroRestauranteService = cadastroRestauranteService;
+		this.restauranteModelAssembler = restauranteModelAssembler;
+		this.restauranteInputDisassembler = restauranteInputDisassembler;
+	}
+
+	@JsonView(RestauranteView.Resumo.class)
 	@GetMapping
 	public List<RestauranteModel> listar(){
 		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
-
 	}
-	
+
+	@JsonView(RestauranteView.ApenasNome.class)
+	@GetMapping(params = "projecao=apenas-nome")
+	public List<RestauranteModel> listarApenasNomes(){
+		return listar();
+	}
+
+//	@GetMapping
+//	public MappingJacksonValue listar(@RequestParam(required = false)String projecao){
+//		List<Restaurante> restaurantes = restauranteRepository.findAll();
+//		List<RestauranteModel> restauranteModel = restauranteModelAssembler.toCollectionModel(restaurantes);
+//
+//		MappingJacksonValue restaurantesWrapper = new MappingJacksonValue(restauranteModel);
+//
+//		restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
+//
+//		if("apenas-nome".equals(projecao)){
+//			restaurantesWrapper.setSerializationView(RestauranteView.ApenasNome.class);
+//		}else if("completo".equals(projecao)){
+//			restaurantesWrapper.setSerializationView(null);
+//		}
+//		return restaurantesWrapper;
+//	}
+
 	@GetMapping("/{restauranteId}")
 	public RestauranteModel buscar(@PathVariable Long restauranteId) {
 		Restaurante restaurante =  cadastroRestauranteService.buscarOuFalhar(restauranteId);		
