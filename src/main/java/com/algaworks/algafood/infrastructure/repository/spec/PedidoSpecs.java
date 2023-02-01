@@ -32,9 +32,5 @@ public class PedidoSpecs {
 			}
 			return builder.and(predicates.toArray(new Predicate[0]));
 		};
-
 	}
-	
-
-
 }

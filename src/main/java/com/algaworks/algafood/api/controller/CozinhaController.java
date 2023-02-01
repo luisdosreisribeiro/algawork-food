@@ -5,6 +5,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,23 +31,32 @@ import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 @RestController
 @RequestMapping(value ="/cozinhas")
 public class CozinhaController {
-	
+	private final CadastroCozinhaService cadastroCozinhaService;
+	private final CozinhaRepository cozinhaRepository;
 	@Autowired
-	private CadastroCozinhaService cadastroCozinhaService;
-	
-	@Autowired
-	private CozinhaRepository cozinhaRepository;
-	
-	@Autowired
-	private CozinhaModelAssembler cozinhaModelAssembler;
-	
-	@Autowired
-	private CozinhaInputDisassembler cozinhaInputDisassembler;
-	
-	
+	private final CozinhaModelAssembler cozinhaModelAssembler;
+	private final CozinhaInputDisassembler cozinhaInputDisassembler;
+
+	public CozinhaController(
+			CadastroCozinhaService cadastroCozinhaService,
+			CozinhaRepository cozinhaRepository,
+			CozinhaModelAssembler cozinhaModelAssembler,
+			CozinhaInputDisassembler cozinhaInputDisassembler
+	){
+		this.cadastroCozinhaService = cadastroCozinhaService;
+		this.cozinhaRepository = cozinhaRepository;
+		this.cozinhaModelAssembler = cozinhaModelAssembler;
+		this.cozinhaInputDisassembler = cozinhaInputDisassembler;
+	}
 	@GetMapping
-	public List<CozinhaModel>listar(){
-		return cozinhaModelAssembler.toCollectionModel(cozinhaRepository.findAll());
+	public Page<CozinhaModel>listar(@PageableDefault(size=2) Pageable pageable){
+		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
+		List<CozinhaModel> cozinhasModel = cozinhaModelAssembler.toCollectionModel(cozinhasPage.getContent());
+
+		Page<CozinhaModel> cozinhasModelPage = new PageImpl<>(cozinhasModel, pageable,
+				cozinhasPage.getTotalElements());
+
+		return cozinhasModelPage;
 	}
 
 	
