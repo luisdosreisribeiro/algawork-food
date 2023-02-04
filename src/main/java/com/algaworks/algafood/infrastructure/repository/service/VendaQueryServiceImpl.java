@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.Predicate;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -24,16 +24,21 @@ public class VendaQueryServiceImpl implements VendaQueryService {
         this.manager = manager;
     }
     @Override
-    public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro) {
+    public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro, String timeOffset) {
         var builder = manager.getCriteriaBuilder();
         var query = builder.createQuery(VendaDiaria.class);
         var root = query.from(Pedido.class);
 
-        var functionDateDateCriacao = builder.function(
-                "date", LocalDate.class,root.get("dataCriacao"));
+        var functionDateDataCriacao = builder.function(
+                "date", Date.class,root.get("dataCriacao"));
+        
+        var functionConvertTzDataCriacao = builder.function(
+                "convert_tz", Date.class, root.get("dataCriacao"),builder.literal("+00:00"),
+                builder.literal(timeOffset));
+
 
         var selection = builder.construct(VendaDiaria.class,
-                functionDateDateCriacao,
+                functionDateDataCriacao,
                 builder.count(root.get("id")),
                 builder.sum(root.get("valorTotal")));
 
@@ -51,7 +56,7 @@ public class VendaQueryServiceImpl implements VendaQueryService {
         predicates.add(root.get("status").in(StatusPedido.CONFIRMADO, StatusPedido.ENTREGUE));
 
         query.select(selection);
-        query.groupBy(functionDateDateCriacao);
+        query.groupBy(functionDateDataCriacao);
         query.where(predicates.toArray(new Predicate[0]));
 
         return  manager.createQuery(query).getResultList();
