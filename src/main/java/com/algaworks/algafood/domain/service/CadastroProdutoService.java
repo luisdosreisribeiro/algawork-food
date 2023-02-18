@@ -22,7 +22,7 @@ public class CadastroProdutoService {
 	}
 	
 	public Produto buscarOuFalhar( Long restauranteId, Long produtoId) {
-		return produtoRepository.findById(produtoId)
+		return produtoRepository.findById(restauranteId,produtoId)
 				.orElseThrow(()-> new ProdutoNaoEncontradoException(restauranteId, produtoId));
 		
 	}
