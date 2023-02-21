@@ -47,8 +47,6 @@ public class LocalFotoStorageService implements FotoStorageService {
         }catch(Exception e){
             throw new StorageException("Não foi possível excluir arquivo.", e);
         }
-
-
     }
 
     private Path getArquivoPath(String nomeArquivo){
