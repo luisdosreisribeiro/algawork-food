@@ -11,6 +11,7 @@ import com.algaworks.algafood.domain.service.CadastroProdutoService;
 import com.algaworks.algafood.domain.service.CatalogoFotoProdutoService;
 import com.algaworks.algafood.domain.service.FotoStorageService;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
@@ -85,6 +86,12 @@ public class RestauranteProdutoFotoController {
         }catch(EntidadeNaoEncontradaException e){
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping
+    public void remover(@PathVariable Long restauranteId, @PathVariable Long produtoId){
+        catalogoFotoProdutoService.excluir(restauranteId,produtoId);
 
     }
 
