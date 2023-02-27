@@ -18,7 +18,7 @@ public class AmazonS3Config {
     public AmazonS3 amazonS3(){
         var credentials = new BasicAWSCredentials(
                 storageProperties.getS3().getIdChaveAcesso(),
-                storageProperties.getS3().getChaveAcessoSecreta());
+                storageProperties.getS3().getIdChaveAcessoSecreta());
 
         return AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))

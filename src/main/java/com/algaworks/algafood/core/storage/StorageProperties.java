@@ -26,7 +26,7 @@ public class StorageProperties {
     @Setter
     public class S3{
         private String idChaveAcesso;
-        private String chaveAcessoSecreta;
+        private String idChaveAcessoSecreta;
         private String bucket;
         private Regions regiao;
         private String diretorioFotos;
