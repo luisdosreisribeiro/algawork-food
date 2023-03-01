@@ -3,14 +3,13 @@ package com.algaworks.algafood.infrastructure.service.storage;
 import com.algaworks.algafood.core.storage.StorageProperties;
 import com.algaworks.algafood.domain.service.FotoStorageService;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
+import java.net.URL;
 
 @Service
 public class S3FotoStorageService implements FotoStorageService {
@@ -22,8 +21,13 @@ public class S3FotoStorageService implements FotoStorageService {
     private StorageProperties storageProperties;
 
     @Override
-    public InputStream recuperar(String nomeArquivo) {
-        return null;
+    public FotoRecuperada recuperar(String nomeArquivo) {
+        String caminhoArquivo = getCaminhoArquivo(nomeArquivo);
+
+        URL url = amazonS3.getUrl(storageProperties.getS3().getBucket(),caminhoArquivo);
+
+        return FotoRecuperada.builder()
+                .url(url.toString()).build();
     }
 
     @Override
@@ -37,7 +41,7 @@ public class S3FotoStorageService implements FotoStorageService {
                     caminhoArquivo,
                     novaFoto.getInputStream(),
                     objectMetadata);
-                    //.withCannedAcl(CannedAccessControlList.PublicRead);
+                    //.withCannedAcl(CannedAccessControlList.PublicRead); não funcionou  devido a alguma permissão
 
             amazonS3.putObject(putObjectRequest);
         }catch (Exception e){
