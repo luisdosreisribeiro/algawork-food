@@ -31,93 +31,49 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Restaurante {
-	
+
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(nullable = false)
-	private String nome;	
-	
-		
+	private String nome;
+
 	@Column(name = "taxa_frete", nullable = false)
-	private BigDecimal taxaFrete;	
-	
-	
-	@ManyToOne 
+	private BigDecimal taxaFrete;
+
+	@ManyToOne
 	@JoinColumn(name = "cozinha_id", nullable = false)
 	private Cozinha cozinha;
-	
+
 	@Embedded
 	private Endereco endereco;
-	
-	private boolean ativo = true;
-//	private Boolean ativo  = true;
-	
-	private Boolean aberto = true;
-	
+
+	private Boolean ativo = Boolean.TRUE;
+
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private OffsetDateTime dataCadastro;
-	
+
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private OffsetDateTime dataAtualizacao;
-	
+
 	@ManyToMany
-	@JoinTable(name = "restaurante_forma_pagamento", 
-	joinColumns = @JoinColumn(name = "restaurante_id"), 
-	inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
-	private Set<FormaPagamento> formasPagamento = new HashSet();
-	
-	@ManyToMany
-	@JoinTable(name = "restaurante_usuario_responsavel",
-	joinColumns = @JoinColumn(name = "restaurante_id"),
-	inverseJoinColumns = @JoinColumn(name = "usuario_id"))
-	private Set<Usuario> responsaveis = new HashSet();
-	
+	@JoinTable(name = "restaurante_forma_pagamento",
+			joinColumns = @JoinColumn(name = "restaurante_id"),
+			inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
+	private List<FormaPagamento> formasPagamento = new ArrayList<>();
+
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
 
-	public boolean aceitaFromaPagamento(FormaPagamento formaPagamento){
-		return getFormasPagamento().contains(formaPagamento);
-	}
-
-	public boolean naoAceitaFormaPagamento(FormaPagamento formaPagamento){
-		return !aceitaFromaPagamento(formaPagamento);
-	}
 	public void ativar() {
 		setAtivo(true);
 	}
-	
+
 	public void inativar() {
 		setAtivo(false);
 	}
-	
-	public Boolean removerFormaPagamento(FormaPagamento formaPagamento) {
-		return getFormasPagamento().remove(formaPagamento);
-	}
-
-	public Boolean adicionarFormaPagamento(FormaPagamento formaPagamento) {
-		return getFormasPagamento().add(formaPagamento);
-	}
-	
-	public void abrir() {
-		setAberto(true);
-	}
-	
-	
-	public void fechar() {
-		setAberto(false);
-	}
-	
-	public Boolean adicionarResponsavel(Usuario usuario) {
-		return getResponsaveis().add(usuario);
-	}
-	
-	public Boolean removerResponsavel(Usuario usuario) {
-		return getResponsaveis().remove(usuario);
-	}
-
 }

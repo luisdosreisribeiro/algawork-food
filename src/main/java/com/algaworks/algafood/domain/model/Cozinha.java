@@ -22,44 +22,19 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Cozinha {
-	
-	//@NotNull(groups = Groups.CozinhaId.class)
+
+	//	@NotNull(groups = Groups.CozinhaId.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	//private Long id;	
-		
+
+	//	@NotBlank
 	@Column(nullable = false)
 	private String nome;
-	
+
 	@OneToMany(mappedBy = "cozinha")
 	private List<Restaurante> restaurantes = new ArrayList<>();
-
-	//Parou de reconhecer getter e setter do lombok
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public List<Restaurante> getRestaurantes() {
-		return restaurantes;
-	}
-
-	public void setRestaurantes(List<Restaurante> restaurantes) {
-		this.restaurantes = restaurantes;
-	}	
 	
 	
 

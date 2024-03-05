@@ -45,8 +45,7 @@ public class EstadoController {
 	@GetMapping
 	public List<EstadoModel> listar(){
 		
-		List<Estado> estados = new ArrayList<>();		
-		estados = estadoRepository.findAll();
+		List<Estado> estados = estadoRepository.findAll();
 		return estadoModelAssembler.toCollectionModel(estados);		
 	}
 	

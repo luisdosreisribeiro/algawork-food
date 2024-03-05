@@ -54,6 +54,7 @@ public class FormaPagamentoController {
 	}
 	
 	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
 	public FormaPagamentoModel adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
 
 		FormaPagamento  formaPagamento = formaPagamentoInputDisassembler.toDomainObject(formaPagamentoInput);			

@@ -49,28 +49,16 @@ public class CozinhaController {
 		this.cozinhaInputDisassembler = cozinhaInputDisassembler;
 	}
 	@GetMapping
-	public Page<CozinhaModel>listar(@PageableDefault(size=2) Pageable pageable){
-		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
-		List<CozinhaModel> cozinhasModel = cozinhaModelAssembler.toCollectionModel(cozinhasPage.getContent());
+	public List<CozinhaModel> listar() {
+		List<Cozinha> todasCozinhas = cozinhaRepository.findAll();
 
-		Page<CozinhaModel> cozinhasModelPage = new PageImpl<>(cozinhasModel, pageable,
-				cozinhasPage.getTotalElements());
-
-		return cozinhasModelPage;
+		return cozinhaModelAssembler.toCollectionModel(todasCozinhas);
 	}
 
 	
-	@GetMapping("/{id}")
-	public CozinhaModel buscar(@PathVariable Long id) {		
-		return cozinhaModelAssembler.toModel(cadastroCozinhaService.buscarOuFalhar(id));
-		
-//		Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
-//		
-//		if(cozinha.isPresent()) {
-//			return ResponseEntity.ok(cozinha.get());
-//		}		
-//		
-//		return ResponseEntity.notFound().build();
+	@GetMapping("/{cozinhaId}")
+	public CozinhaModel buscar(@PathVariable Long cozinhaId) {
+		return cozinhaModelAssembler.toModel(cadastroCozinhaService.buscarOuFalhar(cozinhaId));
 	}
 	
 	@PostMapping
