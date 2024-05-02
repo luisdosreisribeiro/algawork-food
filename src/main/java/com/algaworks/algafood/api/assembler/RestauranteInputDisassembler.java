@@ -23,8 +23,9 @@ public class RestauranteInputDisassembler {
 	
 	public void copyToDomainObject(RestauranteInput restauranteInput, Restaurante restaurante) {
 		//identifier of an instance of com.algaworks.algafood.domain.model.Cozinha was altered from 1 to 2
-		restaurante.setCozinha(new Cozinha());
-		
+		if(restaurante.getCozinha() != null) {
+			restaurante.setCozinha(new Cozinha());
+		}
 		
 		//identifier of an instance of com.algaworks.algafood.domain.model.Cidade was altered from 1 to 2
 		if(restaurante.getEndereco() != null) {

@@ -15,10 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.EqualsAndHashCode;
 
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Usuario {
@@ -44,5 +46,13 @@ public class Usuario {
 	@ManyToMany
 	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "usuario_id"),
 			inverseJoinColumns = @JoinColumn(name = "grupo_id"))
-	private List<Grupo> grupos = new ArrayList<>();
+	private Set<Grupo> grupos = new HashSet<>();
+
+	public boolean senhaCoincidemCom(String senha) {
+		return getSenha().equals(senha);
+	}
+
+	public boolean senhaNaoCoincidemCom(String senha) {
+		return !senhaCoincidemCom(senha);
+	}
 }

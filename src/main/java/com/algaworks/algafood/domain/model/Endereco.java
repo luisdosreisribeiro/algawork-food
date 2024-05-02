@@ -12,6 +12,10 @@ import lombok.Data;
 @Embeddable
 public class Endereco {
 
+	public Endereco () {
+		super();
+	}
+
 	@Column(name = "endereco_cep")
 	private String cep;
 
