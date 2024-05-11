@@ -49,10 +49,14 @@ public class CozinhaController {
 		this.cozinhaInputDisassembler = cozinhaInputDisassembler;
 	}
 	@GetMapping
-	public List<CozinhaModel> listar() {
-		List<Cozinha> todasCozinhas = cozinhaRepository.findAll();
+	public Page<CozinhaModel> listar(Pageable pageable) {
+		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 
-		return cozinhaModelAssembler.toCollectionModel(todasCozinhas);
+		List<CozinhaModel> cozinhasModel = cozinhaModelAssembler.toCollectionModel(cozinhasPage.getContent());
+
+		Page<CozinhaModel>cozinhasModelPage = new PageImpl<>(cozinhasModel, pageable, cozinhasPage.getTotalElements());
+
+		return cozinhasModelPage;
 	}
 
 	
